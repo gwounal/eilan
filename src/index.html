@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
+  <title>Eilañ</title>
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="brand">
+    <img src="assets/icon.svg" alt="" width="30" height="30">
+    <strong>Eilañ</strong>
+    <button id="settings-open" class="icon-btn" type="button" title="Réglages" aria-label="Réglages">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+    <button id="about-open" class="icon-btn" type="button" title="À propos" aria-label="À propos">i</button>
+  </header>
+  <main class="cols">
+
+    <!-- Colonne gauche : médias connectés + préréglages/destinations -->
+    <div class="left">
+      <section class="panel panel-avail">
+        <div class="panel-head">
+          <h2 title="Glissez un support vers la zone centrale, ou cliquez dessus.">Médias connectés <span class="info-i" tabindex="0" aria-label="Glissez un support vers la zone centrale, ou cliquez dessus." title="Glissez un support vers la zone centrale, ou cliquez dessus.">ⓘ</span></h2>
+          <div class="head-actions">
+            <button id="refresh-vols" class="icon-btn" type="button" title="Actualiser la liste" aria-label="Actualiser la liste">↻</button>
+          </div>
+        </div>
+        <div id="vol-list" class="vol-list"></div>
+        <p id="vol-empty" class="empty-msg">Aucune clé ni carte détectée.</p>
+      </section>
+
+      <section class="panel panel-presets" id="presets-zone">
+        <div class="panel-head">
+          <h2 title="Glissez un préréglage vers Destination pour l’utiliser. Les cases servent à choisir les préréglages à supprimer.">Préréglages <span class="info-i" tabindex="0" aria-label="Glissez un préréglage vers Destination pour l’utiliser. Les cases servent à choisir les préréglages à supprimer." title="Glissez un préréglage vers Destination pour l’utiliser. Les cases servent à choisir les préréglages à supprimer.">ⓘ</span></h2>
+          <div class="head-actions">
+            <button id="preset-new" class="btn small" type="button">+ Nouveau</button>
+            <button id="preset-delete" class="btn small danger" type="button" disabled>Supprimer</button>
+          </div>
+        </div>
+        <ul id="preset-list" class="preset-list"></ul>
+        <p id="preset-empty" class="empty-msg">Aucun préréglage. Cliquez sur « + Nouveau » pour en créer un.</p>
+        <div id="preset-status" class="info" role="status"></div>
+      </section>
+    </div>
+
+    <!-- Centre : source, destination, copie -->
+    <div class="center">
+      <section class="panel panel-source" id="source-zone">
+        <div class="panel-head">
+          <h2>Source</h2>
+          <div class="head-actions">
+            <button id="pick-folder" class="icon-btn" type="button" title="Ajouter un dossier source" aria-label="Ajouter un dossier source">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 10.5v5M9.5 13h5"/></svg>
+            </button>
+          </div>
+        </div>
+        <input id="offload-id" type="text" placeholder="Nom de la copie (par défaut : nom de la carte)" aria-label="Nom de la copie" title="Remplace le nom de la carte dans {source}. Vide : nom de la carte ou du dossier." spellcheck="false">
+        <div id="dropzone" class="dropzone"><span>Déposez ici <br>cartes ou dossiers</span></div>
+        <ul id="src-list" class="src-list"></ul>
+        <datalist id="devices-list"></datalist>
+        <div id="src-total" class="info"></div>
+        <div id="src-status" class="info bad" role="status"></div>
+        <div><button id="src-clear" class="link" type="button" hidden>Tout retirer</button></div>
+      </section>
+
+      <section class="panel panel-dest" id="dest-zone">
+        <div class="panel-head">
+          <h2>Destination</h2>
+          <div class="head-actions">
+            <button id="dest-delete" class="btn small danger" type="button" hidden>Supprimer</button>
+            <button id="dest-clear" class="link" type="button" hidden>Tout retirer</button>
+            <button id="add-dest" class="icon-btn" type="button" title="Ajouter un dossier de destination" aria-label="Ajouter un dossier de destination">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M12 10.5v5M9.5 13h5"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="dest-meta">
+        <div id="dest-chip" class="dest-chip" hidden></div>
+        <ul id="preset-menu" class="preset-menu" role="listbox" aria-label="Préréglages" hidden></ul>
+        <button id="preset-save-current" class="icon-btn" type="button" hidden title="Enregistrer" aria-label="Enregistrer">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l4 4v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M7 3v5h8V3M7 21v-7h10v7"/></svg>
+            </button>
+                </div>
+        <div id="dest-empty" class="dropzone"><span>Déposez ici <br>un préréglage ou des dossiers</span></div>
+        <ul id="dest-list" class="dest-list"></ul>
+        <p id="dest-warn" class="warn" hidden></p>
+        <div id="shoot-box" class="shoot" hidden>
+          <div id="day-counter" class="shoot-row">
+            <span>Jour</span>
+            <button id="day-minus" class="btn small" type="button" title="Jour précédent">−</button>
+            <label class="sr-only" for="day-next">Numéro du jour</label>
+            <input id="day-next" type="number" min="1" max="9999" step="1">
+            <button id="day-plus" class="btn small" type="button" title="Jour suivant">+</button>
+          </div>
+          <div id="card-counter" class="shoot-row">
+            <span>Prochaine carte</span>
+            <strong id="card-next-name" class="mono"></strong>
+            <label class="sr-only" for="card-next">Prochain numéro</label>
+            <input id="card-next" type="number" min="0" max="999999" step="1">
+            <button id="card-reset" class="btn small" type="button" title="Remettre le compteur à 1">Réinitialiser</button>
+          </div>
+        </div>
+        <div class="copy-opts">
+          <h2>Vérification</h2>
+          <div class="copy-row">
+            <select id="verif" aria-label="Vérification">
+              <option value="none">Sans</option>
+              <option value="xxh64" selected>xxHash64</option>
+              <option value="md5">MD5</option>
+            </select>
+            <label class="check"><input type="checkbox" id="only-videos"> Copier uniquement les vidéos et le son</label>
+          </div>
+          <div class="add-row">
+            <div id="add-status" class="info" role="status"></div>
+            <button id="add-task" class="btn primary" type="button" disabled>Ajouter à la file</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Droite : copies -->
+    <section class="panel panel-queue">
+      <h2>Copies</h2>
+
+      <div id="progress" hidden>
+        <div class="phase-row"><span id="phase">Copie en cours</span><span id="pct">0 %</span></div>
+        <div class="bar"><div id="bar-fill"></div></div>
+        <dl class="stats">
+          <div><dt>Temps restant</dt><dd id="eta">--:--</dd><small id="eta-queue"></small></div>
+          <div><dt>Médias restants</dt><dd id="videos">0</dd></div>
+          <div><dt>Fichiers</dt><dd id="files">0 / 0</dd></div>
+          <div><dt>Débit</dt><dd id="speed">0 Mo/s</dd></div>
+        </dl>
+        <div id="current" class="current"></div>
+      </div>
+
+      <div class="queue-scroll">
+        <h3 class="sect" id="sect-upcoming" hidden>À venir</h3>
+        <ul id="upcoming-list" class="queue-list"></ul>
+        <h3 class="sect" id="sect-history" hidden>Terminées</h3>
+        <ul id="history-list" class="queue-list"></ul>
+        <p id="queue-empty" class="empty-msg">Aucune copie. Déposez une source, choisissez un préréglage, puis « Ajouter à la file ».</p>
+      </div>
+
+      <div class="queue-bar">
+        <button id="history-clear" class="btn small danger" type="button">Vider les terminées</button>
+        <button id="queue-cancel" class="btn small" type="button">Tout annuler</button>
+        <span class="spacer"></span>
+        <button id="queue-stop" class="btn" type="button" hidden>Arrêter</button>
+        <button id="queue-start" class="btn primary" type="button" disabled>Lancer la copie</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal d'édition d'un préréglage -->
+  <dialog id="about-modal" aria-labelledby="about-title">
+  <div class="about-head">
+    <img src="assets/icon.svg" alt="" width="64" height="64">
+    <div>
+      <h2 id="about-title">Eilañ</h2>
+      <small id="about-version"></small>
+    </div>
+  </div>
+  <p>« eilañ » : « copier » en breton. Copie de rushs vers une ou plusieurs destinations, avec vérification par empreinte (xxHash64 ou MD5) et rapport.</p>
+  <div class="mfoot">
+    <button id="about-data" class="btn" type="button">Ouvrir le dossier de données</button>
+    <span class="spacer"></span>
+    <button id="about-close" class="btn primary" type="button">Fermer</button>
+  </div>
+</dialog>
+
+<dialog id="settings-modal" aria-labelledby="s-title">
+  <h2 id="s-title">Réglages</h2>
+
+  <div class="setrow">
+    <label for="s-lang">Langue</label>
+    <select id="s-lang">
+      <option value="fr">Français</option>
+      <option value="en">English</option>
+      <option value="br">Brezhoneg</option>
+    </select>
+  </div>
+  <div class="setrow">
+    <label for="s-theme">Thème</label>
+    <select id="s-theme">
+      <option value="system">Suivre le système</option>
+      <option value="light">Clair</option>
+      <option value="dark">Foncé</option>
+    </select>
+  </div>
+  <div class="setrow">
+    <label for="s-report">Format du rapport</label>
+    <select id="s-report">
+      <option value="txt">Texte</option>
+      <option value="pdf">PDF</option>
+      <option value="md">Markdown</option>
+    </select>
+  </div>
+  <label class="check"><input type="checkbox" id="s-thumbs"> Vignettes dans le rapport (PDF et Markdown)</label>
+  <p class="hint">Le rapport est écrit dans chaque destination, à la fin de chaque copie.</p>
+  <p id="s-thumbs-note" class="hint" hidden>ffmpeg est introuvable : le rapport sera écrit sans vignettes. Installez-le (par exemple « brew install ffmpeg ») ou lancez « npm install ».</p>
+
+  <div class="mfield"><span>Dossier des préréglages</span>
+    <code id="s-presets-dir" class="pathbox"></code>
+    <div class="row-btns">
+      <button id="s-pick-dir" class="btn small" type="button">Choisir…</button>
+      <button id="s-dir-default" class="btn small" type="button">Par défaut</button>
+      <button id="s-open-dir" class="btn small" type="button">Ouvrir</button>
+    </div>
+    <small>Les préréglages sont lus et enregistrés dans ce dossier. Pointez-le vers un dossier partagé pour les retrouver sur plusieurs ordinateurs.</small>
+    <div id="s-note" class="info" role="status"></div>
+  </div>
+
+  <div class="mfoot">
+    <span class="spacer"></span>
+    <button id="s-close" class="btn primary" type="button">Fermer</button>
+  </div>
+</dialog>
+
+<dialog id="preset-modal" aria-labelledby="m-title">
+    <h2 id="m-title">Nouveau préréglage</h2>
+
+    <label class="mfield">Nom
+      <input id="m-name" type="text" placeholder="Ex. Tournage – Jour 1" spellcheck="false">
+    </label>
+    <div class="mfield"><span>Couleur</span>
+      <div id="m-colors" class="swatches" role="radiogroup" aria-label="Couleur du préréglage"></div>
+    </div>
+
+    <div class="mfield"><span>Destinations</span>
+      <ul id="m-dest-list" class="dest-list"></ul>
+      <p id="m-dest-empty" class="empty-msg">Ajoutez au moins une destination, ou glissez-y un dossier.</p>
+      <div><button id="m-add-dest" class="btn small" type="button">Ajouter une destination</button></div>
+    </div>
+
+    <div class="mfield"><span>Numérotation des cartes</span>
+      <label class="check"><input type="checkbox" id="m-card-auto"> Numéroter automatiquement {carte} (A001, A002…)</label>
+      <div class="card-fields" id="m-card-fields">
+        <label>Préfixe <input id="m-card-prefix" type="text" maxlength="20" spellcheck="false"></label>
+        <label>Chiffres <input id="m-card-pad" type="number" min="1" max="6"></label>
+        <label>Prochain n° <input id="m-card-next" type="number" min="0" max="999999"></label>
+        <small id="m-card-preview"></small>
+      </div>
+    </div>
+
+    <div class="mfield structure" role="group" aria-label="Arborescence">Arborescence dans chaque destination
+      <div id="m-levels" class="levels" aria-label="Niveaux de dossiers"></div>
+      <input id="m-structure" type="hidden" value="{source}">
+      <span id="m-tokens" class="tokens"></span>
+      <small>Variables : {date} {AAAA} {MM} {JJ} {jour} {appareil} {carte} {source} {heure}. Glissez les niveaux pour changer l’ordre. Tapez dans le champ pour ajouter un texte libre (Entrée ou / pour valider le niveau). Double-clic sur un niveau pour le modifier : on peut y mêler texte et variables, par exemple J{jour}_{AAAA}_{MM}_{JJ}. Vide : racine de la destination.</small>
+      <small id="m-structure-preview"></small>
+    </div>
+
+    <div class="options">
+      <label class="selfield"><span>Vérification</span>
+            <select id="m-verif">
+              <option value="none">Sans</option>
+              <option value="xxh64" selected>xxHash64</option>
+              <option value="md5">MD5</option>
+            </select>
+          </label>
+      <label class="check"><input type="checkbox" id="m-only-videos"> Copier uniquement les vidéos et le son</label>
+    </div>
+
+    <p id="m-error" class="warn" hidden></p>
+    <div class="mfoot">
+      <span class="spacer"></span>
+      <button id="m-cancel" class="btn" type="button">Annuler</button>
+      <button id="m-save" class="btn primary" type="button">Enregistrer</button>
+    </div>
+  </dialog>
+  <script src="i18n.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
