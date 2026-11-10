@@ -79,9 +79,18 @@ function buildMenu() {
   const about = { label: tr('À propos d’Eilañ'), click: () => { if (win) win.webContents.send('show-about'); } };
   const mac = process.platform === 'darwin';
   Menu.setApplicationMenu(Menu.buildFromTemplate([
-    ...(mac ? [{ label: app.name, submenu: [about, { type: 'separator' }, { role: 'services' }, { type: 'separator' },
+    ...(mac ? [{ label: app.name, submenu: [about, { type: 'separator' },
       { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' }, { type: 'separator' }, { role: 'quit' }] }] : []),
-    { role: 'editMenu' }, { role: 'viewMenu' }, { role: 'windowMenu' },
+    { role: 'editMenu', submenu: [{ role: 'undo' }, { role: 'redo' }, { type: 'separator' },
+      { role: 'cut' }, { role: 'copy' }, { role: 'paste' }, { role: 'selectAll' }] },
+    { label: tr('Paramètres'), submenu: [
+      { label: tr('Ajouter un dossier source') + '…', click: () => { if (win) win.webContents.send('menu-action', 'source'); } },
+      { label: tr('Ajouter un dossier de destination') + '…', click: () => { if (win) win.webContents.send('menu-action', 'dest'); } },
+      { label: tr('Nouveau préréglage') + '…', click: () => { if (win) win.webContents.send('menu-action', 'preset'); } },
+      { type: 'separator' },
+      { label: tr('Réglages généraux') + '…', accelerator: 'CmdOrCtrl+,', click: () => { if (win) win.webContents.send('menu-action', 'settings'); } }
+    ] },
+    { role: 'windowMenu', submenu: [{ role: 'minimize' }, { role: 'close' }] },
     ...(mac ? [] : [{ label: tr('Aide'), submenu: [about] }])
   ]));
 }
@@ -254,6 +263,7 @@ ipcMain.handle('app-info', () => ({
   data: app.getPath('userData')
 }));
 ipcMain.handle('open-path', (_e, p) => shell.openPath(p));
+ipcMain.handle('open-repo', () => shell.openExternal('https://github.com/gwounal/eilan'));   // adresse fixe : le rendu ne peut pas ouvrir d'autre lien
 ipcMain.handle('set-paused', (_e, v) => { if (ctl) ctl.paused = !!v; return !!(ctl && ctl.paused); });
 ipcMain.handle('disk-free', (_e, paths) => Promise.all(paths.map(async (p) => {
   try { const st = await fs.promises.statfs(p); return st.bavail * st.bsize; } catch { return null; }

@@ -13,6 +13,7 @@ contextBridge.exposeInMainWorld('api', {
   settingsResetPresetsDir: () => ipcRenderer.invoke('settings-reset-presets-dir'),
   appInfo: () => ipcRenderer.invoke('app-info'),
   openPath: (p) => ipcRenderer.invoke('open-path', p),
+  openRepo: () => ipcRenderer.invoke('open-repo'),
   pathForFile: (file) => { try { return webUtils.getPathForFile(file); } catch { return ''; } },
   historyList: () => ipcRenderer.invoke('history-list'),
   historySave: (list) => ipcRenderer.invoke('history-save', list),
@@ -26,6 +27,10 @@ contextBridge.exposeInMainWorld('api', {
   onShowAbout: (cb) => {
     ipcRenderer.removeAllListeners('show-about');
     ipcRenderer.on('show-about', () => cb());
+  },
+  onMenuAction: (cb) => {
+    ipcRenderer.removeAllListeners('menu-action');
+    ipcRenderer.on('menu-action', (_e, what) => cb(what));
   },
   onProgress: (cb) => {
     ipcRenderer.removeAllListeners('progress');

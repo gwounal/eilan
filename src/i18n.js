@@ -12,7 +12,7 @@
 
   const en = {
     // --- En-tête, réglages
-    'À propos': 'About', 'Réglages': 'Settings', 'À propos d’Eilañ': 'About Eilañ', 'Aide': 'Help',
+    'À propos': 'About', 'Réglages': 'Settings', 'À propos d’Eilañ': 'About Eilañ', 'Aide': 'Help', 'Dépôt GitHub': 'GitHub repository', 'Paramètres': 'Preferences', 'Réglages généraux': 'General settings',
     'Format du rapport': 'Report format', 'Texte': 'Text', 'Langue': 'Language', 'Dossier des préréglages': 'Presets folder',
     'Choisir…': 'Choose…', 'Par défaut': 'Default', 'Ouvrir': 'Open',
     'Le rapport est écrit dans chaque destination, à la fin de chaque copie.': 'The report is written to each destination at the end of every copy.',
@@ -158,7 +158,7 @@
   };
 
   const br = {
-    'À propos': 'Diwar-benn', 'Réglages': 'Arventennoù', 'À propos d’Eilañ': 'Diwar-benn Eilañ', 'Aide': 'Skoazell',
+    'À propos': 'Diwar-benn', 'Réglages': 'Arventennoù', 'À propos d’Eilañ': 'Diwar-benn Eilañ', 'Aide': 'Skoazell', 'Dépôt GitHub': 'GitHub', 'Paramètres': 'Arventennoù', 'Réglages généraux': 'Arventennoù hollek',
     'Format du rapport': 'Mentrezh ar rentañ kont', 'Texte': 'Testenn', 'Langue': 'Yezh', 'Dossier des préréglages': 'Teuliad ar rakarventennoù',
     'Choisir…': 'Dibab…', 'Par défaut': 'Dre ziouer', 'Ouvrir': 'Digeriñ',
     'Le rapport est écrit dans chaque destination, à la fin de chaque copie.': 'Skrivet e vez ar rentañ kont e pep pal, p’eo echu pep eilañ.',

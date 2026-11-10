@@ -1228,6 +1228,7 @@ function setLang(code) {
   window.api.onShowAbout(openAbout);
   $('about-close').onclick = () => dlg.close();
   $('about-data').onclick = () => { if (info) window.api.openPath(info.data); };
+  $('about-repo').onclick = () => window.api.openRepo();
   // la version affichée suit la langue
   window.addEventListener('lang-changed', () => { if (info) $('about-version').textContent = t('Version {v}', { v: info.version }); });
 }
@@ -1254,6 +1255,12 @@ function applyTheme(theme) { document.documentElement.dataset.theme = ['light', 
     try { settingsCache = await window.api.settingsGet(); } catch { /* garde le cache */ }
     note(''); show(); dlg.showModal();
   };
+  // menu « Paramètres » de l'application : mêmes actions que les boutons de l'interface
+  window.api.onMenuAction((what) => {
+    if (document.querySelector('dialog[open]')) return;
+    const id = { source: 'pick-folder', dest: 'add-dest', preset: 'preset-new', settings: 'settings-open' }[what];
+    if (id) $(id).click();
+  });
   $('s-close').onclick = () => dlg.close();
   $('s-report').onchange = async () => { settingsCache = await window.api.settingsSet({ reportFormat: $('s-report').value }); show(); };
   $('s-theme').onchange = async () => { settingsCache = await window.api.settingsSet({ theme: $('s-theme').value }); applyTheme(settingsCache.theme); show(); };
